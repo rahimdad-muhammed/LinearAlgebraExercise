@@ -7,17 +7,17 @@ from Tools import GraphEngine as graph
 
 class Main:
 
-	def __init__(self):
+	def __init__(self) -> None:
 
 		super().__init__()
 
 		pygame.init()
 
-		self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-		pygame.display.set_caption("Linear Algebra Exercise")
-		self.clock = pygame.time.Clock()
+		self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN) # setting screen to fullsize
+		pygame.display.set_caption("Linear Algebra Exercise") # title
+		self.clock = pygame.time.Clock() # preparing the clock function for frame rate
 
-		self.screen_w, self.screen_h = self.screen.get_size()
+		self.screen_w, self.screen_h = self.screen.get_size() # getting the size of the screen (width, height)
 
 		# setting the graph axis
 		self.graph = graph((self.screen_w/2, self.screen_h/2))
@@ -25,18 +25,22 @@ class Main:
 
 
 		# Test Case
-		self.graph.grid_x = 2
-		self.graph.grid_y = 2
 		circ_center = (-4,4)
 		self.show_circ = self.graph.show_point(circ_center)
 
 
-	def main_loop(self):
+	def main_loop(self) -> None:
+		"""
+		PURPOSE: Runs the whole program, starter of this program
+		"""
 
+		# game loop
 		while True:
 
+			# user events
 			for event in pygame.event.get():
 
+				# finish the program
 				if event.type == pygame.QUIT:
 
 					pygame.quit()
@@ -63,13 +67,43 @@ class Main:
 
 			
 
+			# update the display
 			pygame.display.flip()
+			# set frame rate to 60 fps
 			self.clock.tick(60)
 
-
+# run the program only and only when this file runned directly
 if __name__ == '__main__':
 
 	Main().main_loop()
+
+
+
+# Thinking Space
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
