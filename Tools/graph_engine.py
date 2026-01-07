@@ -46,21 +46,39 @@ class GraphEngine:
 		
 		return (point[0] + self.axis[0], self.axis[1] - point[1])
 
+	def real_to_graph(self, realShift : tuple[int | float]) -> tuple[int | float]:
+
+		
+		return (((realShift[0] - self.axis[0])/self.shift) * self.block_x, ((-realShift[1] + self.axis[1])/self.shift) * self.block_y)
+
+
+	
+
+	def normal_to_graph(self, shiftX : int, shiftY : int) -> tuple[int | float]:
+		"""
+		Not use this right now its not ready yet
+		"""
+
+		return (((shiftX/self.shift) * self.block_x), ((shiftY/self.shift), self.block_y))
+
 	def show_object(self, points):
 
 		pass
 
-	def show_graph(self, surface, 
+	def show_graph(self, surface,
+				   mouse_pos : tuple[int],
 				   axis_colour : tuple[int] = (255,255,255), 
 				   grid_colour : tuple[int] = (100, 100, 100),
 				   point_colour : tuple[int] = (255,0,0)
-				   )-> None:
+				  )-> None:
 		"""
 		PURPOSE: Shows the graph table on the screen
 		
 		param: axis_colour -> color of the axis_lines (x,y)
 		param: grid_colour -> color of the grid lines
 		"""
+
+		font = pygame.font.Font(None, 30)
 
 		y_axis_start = (0, self.axis[1])
 		y_axis_end = (0, -self.axis[1])
@@ -82,41 +100,64 @@ class GraphEngine:
 			for grid_y in range(0,int(y_axis_start[1]), self.shift):
 
 				# point for the topright side of the graph
-				point_topright = (grid_x, grid_y)
-				# point for the bottomright side of the graph
-				point_bottomright = (grid_x, -grid_y)
-				# point for the topleft side of the graph
-				point_topleft = (-grid_x, grid_y)
-				# point for the bottomleft side of the graph
-				point_bottomleft = (-grid_x, -grid_y)
+				if abs(mouse_pos[0]-self.normal_point((grid_x, grid_y))[0]) < ((self.shift)/2) and abs(
+					mouse_pos[1]-self.normal_point((grid_x, grid_y))[1]) < ((self.shift)/2):
 
-				topright_rect = pygame.Rect(0,0,10,10)
-				topright_rect.center = self.normal_point(point_topright)
-
-				bottomright_rect = pygame.Rect(0,0,10,10)
-				bottomright_rect.center = self.normal_point(point_bottomright)
-
-				topleft_rect = pygame.Rect(0,0,10,10)
-				topleft_rect.center = self.normal_point(point_topleft)
-
-				bottomleft_rect = pygame.Rect(0,0, 10,10)
-				bottomleft_rect.center = self.normal_point(point_bottomleft)
-
-				if abs(mouse_pos[0]-topright_rect.centerx) <= (self.block_x/2) and abs(mouse_pos[1]-topright_rect.centery) <= (self.block_y/2):
+					topright_rect = pygame.Rect(0,0,10,10)
+					topright_rect.center = self.normal_point((grid_x, grid_y))
 					
 					pygame.draw.rect(surface, (point_colour), topright_rect, 0, 10)
-					
-				elif abs(mouse_pos[0]-topright_rect.centerx)<= (self.block_x/2) and abs(mouse_pos[1]-topright_rect.centery)<= (self.block_y/2):
+
+					# TEST
+					point_font = font.render(str(self.real_to_graph(topright_rect.center)), True, (0,255,0))
+					font_pos = point_font.get_rect(midbottom = (topright_rect.midtop[0], topright_rect.midtop[1] - 10))
+
+					surface.blit(point_font, font_pos)
+
+				# point for the bottomright side of the graph
+				elif abs(mouse_pos[0]-self.normal_point((grid_x, -grid_y))[0]) < ((self.shift)/2) and abs(
+					mouse_pos[1]-self.normal_point((grid_x, -grid_y))[1]) < ((self.shift)/2):
+
+					bottomright_rect = pygame.Rect(0,0,10,10)
+					bottomright_rect.center = self.normal_point((grid_x, -grid_y))
 					
 					pygame.draw.rect(surface, (point_colour), bottomright_rect, 0, 10)
-					
-				elif abs(mouse_pos[0]-topright_rect.centerx)<= (self.block_x/2) and abs(mouse_pos[1]-topright_rect.centery)<= (self.block_y/2):
+
+					# TEST
+					point_font = font.render(str(self.real_to_graph(bottomright_rect.center)), True, (0,255,0))
+					font_pos = point_font.get_rect(midbottom = (bottomright_rect.midtop[0], bottomright_rect.midtop[1] - 10))
+
+					surface.blit(point_font, font_pos)
+
+				# point for the topleft side of the graph
+				elif abs(mouse_pos[0]-self.normal_point((-grid_x, grid_y))[0]) < ((self.shift)/2) and abs(
+					mouse_pos[1]-self.normal_point((-grid_x, grid_y))[1]) < ((self.shift)/2):
+
+					topleft_rect = pygame.Rect(0,0,10,10)
+					topleft_rect.center = self.normal_point((-grid_x, grid_y))
 					
 					pygame.draw.rect(surface, (point_colour), topleft_rect, 0, 10)
-					
-				elif abs(mouse_pos[0]-topright_rect.centerx)<= (self.block_x/2) and abs(mouse_pos[1]-topright_rect.centery)<= (self.block_y/2):
+
+					# TEST
+					point_font = font.render(str(self.real_to_graph(topleft_rect.center)), True, (0,255,0))
+					font_pos = point_font.get_rect(midbottom = (topleft_rect.midtop[0], topleft_rect.midtop[1] - 10))
+
+					surface.blit(point_font, font_pos)
+
+				# point for the bottomleft side of the graph
+				elif abs(mouse_pos[0]-self.normal_point((-grid_x, -grid_y))[0]) < ((self.shift)/2) and abs(
+					mouse_pos[1]-self.normal_point((-grid_x, -grid_y))[1]) < ((self.shift)/2):
+
+					bottomleft_rect = pygame.Rect(0,0, 10,10)
+					bottomleft_rect.center = self.normal_point((-grid_x, -grid_y))
 					
 					pygame.draw.rect(surface, (point_colour), bottomleft_rect, 0, 10)
+
+					# TEST
+					point_font = font.render(str(self.real_to_graph(bottomleft_rect.center)), True, (0,255,0))
+					font_pos = point_font.get_rect(midbottom = (bottomleft_rect.midtop[0], bottomleft_rect.midtop[1] - 10))
+
+					surface.blit(point_font, font_pos)
 
 
 		

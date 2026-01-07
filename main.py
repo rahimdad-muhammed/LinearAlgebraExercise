@@ -3,6 +3,7 @@ import numpy as np
 from sys import exit
 
 from Tools import GraphEngine as graph
+from Tools import SideBar as side_bar
 
 
 class Main:
@@ -25,8 +26,11 @@ class Main:
 
 
 		# Test Case
+		self.graph.block_x = 2
+		self.graph.block_y = 2
 		circ_center = (-4,4)
 		self.show_circ = self.graph.show_point(circ_center)
+
 
 
 	def main_loop(self) -> None:
@@ -58,13 +62,15 @@ class Main:
 
 
 			# showing the graph on screen
-			self.graph.show_graph(self.screen)
+			mouse_poss = pygame.mouse.get_pos()
+			self.graph.show_graph(self.screen, mouse_pos = mouse_poss)
 
 
 			# Test Case
 			pygame.draw.circle(self.screen, (255,0,0), self.show_circ, 10)
 
 
+			
 			
 
 			# update the display
